@@ -11,7 +11,7 @@ pipeline {
 
         stage('Slow Operation') {
             steps {
-		timeout(time: 5, unit: 'SECONDS') {
+		timeout(time: 21, unit: 'SECONDS') {
                 	sh 'sleep 20'
 		}
             }
@@ -19,6 +19,7 @@ pipeline {
 
         stage('Flaky Operation') {
             steps {
+		retry(3) {
                 sh '''
                     if [ ! -f /tmp/retry-demo ]; then
                         touch /tmp/retry-demo
@@ -28,7 +29,8 @@ pipeline {
 
                     echo "Operation succeeded"
                 '''
-            }
+            	}
+		}
         }
 
         stage('Hard Failure') {
