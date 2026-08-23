@@ -11,7 +11,7 @@ pipeline {
 
         stage('Slow Operation') {
             steps {
-		timeout(time: 21, unit: 'SECONDS') {
+		timeout(time: 30, unit: 'SECONDS') {
                 	sh 'sleep 20'
 		}
             }
