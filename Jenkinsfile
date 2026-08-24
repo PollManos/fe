@@ -36,7 +36,9 @@ pipeline {
 
 	stage('Notification') {
 	    steps {
-        	sh 'exit 1'
+        	catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+		sh 'exit 1'
+		}		
     		}
 	}
 
