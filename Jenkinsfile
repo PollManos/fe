@@ -33,6 +33,13 @@ pipeline {
 		}
         }
 
+
+	stage('Notification') {
+	    steps {
+        	sh 'exit 1'
+    		}
+	}
+
         stage('Hard Failure') {
             steps {
                 sh 'exit 1'
