@@ -49,3 +49,37 @@ pipeline {
         }
     }
 }
+
+
+
+	post {
+
+		failure {
+			withCredentials([
+				string(credentialsId: 'discord-webhook', variable: 'DISCORD_WEBHOOK')
+			])
+
+			{
+			 	sh '''
+					curl -X POST \
+					-H 'Content-type: application/json' \
+					-d '{"content": "le pipeline a échoué"}' \
+					"$DISCORD_WEBHOOK"
+				'''
+
+			}
+
+		}
+		
+		success {
+			echo "le pipeline a reussi"
+		}
+
+		always {
+			echo "fin"
+		}
+		
+
+
+
+	}
