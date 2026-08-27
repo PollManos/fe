@@ -43,7 +43,7 @@ withCredentials([
         "$DISCORD_WEBHOOK"
     '''
 		}
-
+		}
 		always {
 			echo "fin"
 		}
