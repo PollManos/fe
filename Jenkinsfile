@@ -9,19 +9,11 @@ pipeline {
             }
         }
 
-        stage('Hard Failure') {
-            steps {
-                sh 'exit 1'
-            }
-        }
-    }
-
-
-
-
 	post {
 
 		failure {
+		echo 'pipeline échoué'
+
 			withCredentials([
     string(credentialsId: 'discord-webhook', variable: 'DISCORD_WEBHOOK')
 ]) {
@@ -37,6 +29,16 @@ pipeline {
 		
 		success {
 			echo "le pipeline a reussi"
+
+withCredentials([
+    string(credentialsId: 'discord-webhook', variable: 'DISCORD_WEBHOOK')
+]) {
+    sh '''
+        curl -X POST \
+        -H 'Content-Type: application/json' \
+        -d '{"content":"Job : '"$JOB_NAME"'\\nBuild : '"$BUILD_NUMBER"'\\nLien : '"$BUILD_URL"'"}' \
+        "$DISCORD_WEBHOOK"
+    '''
 		}
 
 		always {
