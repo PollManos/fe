@@ -63,7 +63,7 @@ pipeline {
 			 	sh '''
 					curl -X POST \
 					-H 'Content-type: application/json' \
-					-d '{"content": "le pipeline a échoué"}' \
+					-d '{"content": "Job : $JOB_NAME \n Build : $BUILD_NUMBER \n Lien : $BUILD_URL"}' \
 					"$DISCORD_WEBHOOK"
 				'''
 
