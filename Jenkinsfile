@@ -23,18 +23,13 @@ pipeline {
 
 		failure {
 			withCredentials([
-				string(credentialsId: 'discord-webhook', variable: 'DISCORD_WEBHOOK')
-			])
-
-			{
-			 	sh '''
-					curl -X POST \
-					-H 'Content-Type: application/json' \
-					-d "{\"content\":\"Job : $JOB_NAME\"}" \
-					"$DISCORD_WEBHOOK"
-				'''
-
-			}
+    string(credentialsId: 'discord-webhook', variable: 'DISCORD_WEBHOOK')
+]) {
+    sh '''
+        echo "Webhook présent : ${DISCORD_WEBHOOK:+oui}"
+        curl -I "$DISCORD_WEBHOOK"
+    '''
+}
 
 		}
 		
