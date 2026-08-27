@@ -28,7 +28,7 @@ pipeline {
     sh '''
         curl -X POST \
         -H 'Content-Type: application/json' \
-        -d '{"content":"Job : '"$JOB_NAME"'"}' \
+        -d '{"content":"Job : '"$JOB_NAME"'" \n "Build : '"$BUILD_NUMBER"'" \n "Lien : '"$BUILD_URL"'"}' \
         "$DISCORD_WEBHOOK"
     '''
 }
