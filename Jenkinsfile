@@ -39,7 +39,7 @@ withCredentials([
     sh '''
         curl -X POST \
         -H 'Content-Type: application/json' \
-        -d '{"content":"Job : '"$JOB_NAME"'\\nBuild : '"$BUILD_NUMBER"'\\nLien : '"$BUILD_URL"'"}' \
+        -d '{"content":"le pipeline a reussi\\nJob : '"$JOB_NAME"'\\nBuild : '"$BUILD_NUMBER"'\\nLien : '"$BUILD_URL"'"}' \
         "$DISCORD_WEBHOOK"
     '''
 		}
