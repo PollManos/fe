@@ -26,8 +26,10 @@ pipeline {
     string(credentialsId: 'discord-webhook', variable: 'DISCORD_WEBHOOK')
 ]) {
     sh '''
-        echo "Webhook présent : ${DISCORD_WEBHOOK:+oui}"
-        curl -I "$DISCORD_WEBHOOK"
+        curl -X POST \
+        -H 'Content-Type: application/json' \
+        -d '{"content":"Job : '"$JOB_NAME"'"}' \
+        "$DISCORD_WEBHOOK"
     '''
 }
 
