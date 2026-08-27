@@ -8,6 +8,9 @@ pipeline {
 		echo 'Étape normale'
             }
         }
+    }
+
+
 
 	post {
 
