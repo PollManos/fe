@@ -25,13 +25,13 @@ pipeline {
 	
 	stage("Tests") {
 		steps {
-			python3 app.py		
+			sh "python3 app.py"		
 		}
 	}
 
 	stage("Build image") {
 		steps {
-			ech 'le build est fait'
+			echo 'le build est fait'
 		}
 	}
 
