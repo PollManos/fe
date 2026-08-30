@@ -1,55 +1,62 @@
 pipeline {
     agent any
 
+	parameters {
+		choice(
+			name: 'ENV',
+			choices: ['dev', 'staging', 'prod']
+		)
+
+		booleanParam(
+			name: 'PUSH_IMAGE',
+			defaultValue: false
+		)
+	}
+
+
     stages {
 
-        stage('Normal Step') {
+        stage('Checkout') {
             steps {
-		echo 'Étape normale'
-            }
-        }
-    }
+		checkout scm	
+	    }
+	 }
 
-
-
-	post {
-
-		failure {
-		echo 'pipeline échoué'
-
-			withCredentials([
-    string(credentialsId: 'discord-webhook', variable: 'DISCORD_WEBHOOK')
-]) {
-    sh '''
-        curl -X POST \
-        -H 'Content-Type: application/json' \
-        -d '{"content":"Job : '"$JOB_NAME"'\\nBuild : '"$BUILD_NUMBER"'\\nLien : '"$BUILD_URL"'"}' \
-        "$DISCORD_WEBHOOK"
-    '''
-}
-
+	
+	stage("Tests") {
+		steps {
+			python3 app.py		
 		}
-		
-		success {
-			echo "le pipeline a reussi"
-
-withCredentials([
-    string(credentialsId: 'discord-webhook', variable: 'DISCORD_WEBHOOK')
-]) {
-    sh '''
-        curl -X POST \
-        -H 'Content-Type: application/json' \
-        -d '{"content":"le pipeline a reussi\\nJob : '"$JOB_NAME"'\\nBuild : '"$BUILD_NUMBER"'\\nLien : '"$BUILD_URL"'"}' \
-        "$DISCORD_WEBHOOK"
-    '''
-		}
-		}
-		always {
-			echo "fin"
-		}
-		
-
-
-
 	}
+
+	stage("Build image") {
+		steps {
+			ech 'le build est fait'
+		}
+	}
+
+	stage("Push Image") {
+		when {
+			expression {
+				params.PUSH_IMAGE
+			}
+		}
+		steps {
+			echo 'image est push'
+		}
+	}
+
+	stage("Deploy") {
+		when {
+			expression {
+				params.ENV == 'prod' && params.PUSH_IMAGE
+			}
+		}
+	}
+
+
+
+     }
+
+
 }
