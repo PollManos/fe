@@ -52,6 +52,9 @@ pipeline {
 				params.ENV == 'prod' && params.PUSH_IMAGE
 			}
 		}
+		steps {
+                        echo 'conteneur déployé'
+                }
 	}
 
 
