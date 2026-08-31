@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+
+	environment {
+		MON_APPLI = 'docksaficio/monappamoi'
+	}
+
 	parameters {
 		choice(
 			name: 'ENV',
@@ -11,6 +16,13 @@ pipeline {
 			name: 'PUSH_IMAGE',
 			defaultValue: false
 		)
+
+		string(
+			name: 'version',
+			defaultValue: 'v1',
+			description: 'Quelle version pousse-t-on ?'
+		)
+		
 	}
 
 
@@ -31,35 +43,69 @@ pipeline {
 
 	stage("Build image") {
 		steps {
-			echo 'le build est fait'
+			sh "docker build -t ${MON_APPLI}:${params.version} ."	
 		}
 	}
 
-	stage("Push Image") {
+	stage("Push DockerHub") {
 		when {
 			expression {
-				params.PUSH_IMAGE
-			}
+				params.PUSH_IMAGE && params.ENV == 'prod'
+			}	
 		}
 		steps {
-			echo 'image est push'
+			withCredentials([
+				usernamePassword(
+					credentialsId: 'MaCoToDocker',
+					usernameVariable: 'MonUser',
+					passwordVariable: 'MonPass'
+				)
+			)]
+				{
+				sh 'echo "$MonPass" | docker login -u "$MonUser" --password-stdin'
+			retry(3) {
+				timeout(time: 30, unit: 'SECONDS') {
+					sh "docker push ${MON_APPLI}:${params.version}"
+				}
+			}		
 		}
+		}	
 	}
-
-	stage("Deploy") {
-		when {
-			expression {
-				params.ENV == 'prod' && params.PUSH_IMAGE
+   }
+	
+	post {
+		success {
+			withCredentials([
+				string(
+					credentialsId: 'discord-webhook',
+					variable: 'discordw'
+				)
+			)]
+			{
+				sh '''
+					curl -X POST \
+						-H 'Content-Type: application/json' \
+						-d '{"content":"Pipeline réussi\\nJob: '"$JOB_NAME"'\\nBuild: '"$BUILD_NUMBER"'\\nLien: '"$BUILD_URL"'"}' \
+						"$discordw"
+				'''
 			}
 		}
-		steps {
-                        echo 'conteneur déployé'
-                }
+		
+		failure {
+			withCredentials([
+				string(
+					credentialsId: 'discord-webhook',
+					variable: 'discordw'
+				)
+			])
+				{
+				sh '''
+					curl -X POST \
+						-H "Content-Type: application/json" \
+						-d '{"content":"Pipeline raté\\nJob: '"$JOB_NAME"'\\nBuild: '"$BUILD_NUMBER"'\\nLien: '"$BUILD_URL"'"}' \
+						'$discordw'
+				'''
+				}
+		}
 	}
-
-
-
-     }
-
-
 }
