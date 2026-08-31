@@ -60,7 +60,7 @@ pipeline {
 					usernameVariable: 'MonUser',
 					passwordVariable: 'MonPass'
 				)
-			)]
+			])
 				{
 				sh 'echo "$MonPass" | docker login -u "$MonUser" --password-stdin'
 			retry(3) {
