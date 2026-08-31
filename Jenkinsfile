@@ -103,7 +103,7 @@ pipeline {
 					curl -X POST \
 						-H "Content-Type: application/json" \
 						-d '{"content":"Pipeline raté\\nJob: '"$JOB_NAME"'\\nBuild: '"$BUILD_NUMBER"'\\nLien: '"$BUILD_URL"'"}' \
-						'$discordw'
+						"$discordw"
 				'''
 				}
 		}
