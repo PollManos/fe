@@ -80,7 +80,7 @@ pipeline {
 					credentialsId: 'discord-webhook',
 					variable: 'discordw'
 				)
-			)]
+			])
 			{
 				sh '''
 					curl -X POST \
