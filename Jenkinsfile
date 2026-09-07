@@ -17,7 +17,7 @@ pipeline {
 		choices ['dev', 'staging', 'prod']
 		)
 		
-		boolean(
+		booleanParam(
 			name: 'PUSH_IMAGE',
 			defaultValue: false
 		)	
