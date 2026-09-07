@@ -1,8 +1,8 @@
 services:
   web:
-    image: docksaficio/monappamoi:v5555
+    image: docksaficio/monapp:${VERSION}
     ports:
-      -  "8080:5000"
+      -  "8081:5000"
 
 
   db:
