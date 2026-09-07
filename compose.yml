@@ -1,0 +1,18 @@
+services:
+  web:
+    image: docksaficio/monappamoi:v5555
+    ports:
+      -  "8080:5000"
+
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: moi
+      POSTGRES_PASSWORD: mdp
+      POSTGRES_DB: nomdelabase
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
