@@ -14,7 +14,7 @@ pipeline {
 	
 		choice(
 		name: 'ENV',
-		choices ['dev', 'staging', 'prod']
+		choices: ['dev', 'staging', 'prod']
 		)
 		
 		booleanParam(
@@ -28,7 +28,7 @@ pipeline {
 
 		stage("Tests") {
 			steps {
-				sh "python3 app.py" 
+				sh 'python3 -m py_compile app.py' 
 			}
 		}
 
