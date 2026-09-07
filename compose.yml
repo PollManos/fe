@@ -6,13 +6,13 @@ services:
 
 
   db:
-    image: postgres
+    image: postgres:18
     environment:
       POSTGRES_USER: moi
       POSTGRES_PASSWORD: mdp
       POSTGRES_DB: nomdelabase
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql
 
 volumes:
   db_data:
