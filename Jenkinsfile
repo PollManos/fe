@@ -44,19 +44,12 @@ pipeline {
 			steps {
                         	withCredentials([usernamePassword(
                                 	credentialsId: 'MaCoToDocker',
-                                	usernameVariable: 'User',
-                                	passwordVariable: 'Pass'
+                                	usernameVariable: 'MonUser',
+                                	passwordVariable: 'MonPass'
                         	)])
 					
 				
                         	{
-					sh '''
-    if [ -n "$User" ]; then
-        echo "User présent"
-    else
-        echo "User VIDE"
-    fi
-'''
                                 	retry(3){
                                         	timeout(time: 20, unit: 'SECONDS') {
                                                 	sh 'echo "$Pass" | docker login -u "$User" --password-stdin'
