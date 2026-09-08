@@ -47,9 +47,16 @@ pipeline {
                                 	usernameVariable: "User",
                                 	passwordVariable: "Pass"
                         	)])
-			
-
+					
+				
                         	{
+					sh '''
+    if [ -n "$User" ]; then
+        echo "User présent"
+    else
+        echo "User VIDE"
+    fi
+'''
                                 	retry(3){
                                         	timeout(time: 20, unit: 'SECONDS') {
                                                 	sh 'echo "$Pass" | docker login -u "$User" --password-stdin'
