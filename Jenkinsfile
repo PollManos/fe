@@ -49,13 +49,6 @@ pipeline {
                         	)])
 					
                         	{
-					sh '''
-    if [ -n "$DOCKER_USER" ]; then
-        echo "DOCKER_USER présent"
-    else
-        echo "DOCKER_USER VIDE"
-    fi
-'''
                                 	retry(3){
                                         	timeout(time: 20, unit: 'SECONDS') {
                                                 	sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
