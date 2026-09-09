@@ -77,7 +77,7 @@ pipeline {
 				}
 			}
 			steps {
-				sh "VERSION=${params.VERSION} docker compose up -d"
+				sh "VERSION=${params.VERSION} docker compose -p monapp up -d"
 			}
 		}
 	}
