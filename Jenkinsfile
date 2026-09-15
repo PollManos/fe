@@ -78,7 +78,7 @@ pipeline {
 				]))
 					{	retry(3){
 							timeout(time: 30, unit: 'SECONDS'){
-								sh 'ssh -i "$SSKey" "$leuser"@192.168.1.11 'VERSION=${params.VERSION} docker compose -p monapp up -d''
+								sh 'ssh -i "$SSKey" "$leuser"@192.168.1.11 'cd fe && VERSION=${params.VERSION} docker compose -p monapp up -d''
 							}	
 						}
 					}
@@ -86,4 +86,4 @@ pipeline {
 			}
 		}
 	}
-	}
+}
