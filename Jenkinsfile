@@ -48,17 +48,18 @@ pipeline {
                                 	passwordVariable: 'DOCKER_PASS'
                         	)])
 					
-                        	{
-                                	retry(3){
-                                        	timeout(time: 20, unit: 'SECONDS') {
-                                                	sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
-                                        	}
-                                	}
-                                	retry(3){
-                                        	timeout(time: 20, unit: 'SECONDS') {
-                                                	sh "docker push ${APPLI}:${params.VERSION}"
-                                        	}
-                                	}
+                        	{			
+                                		retry(3){
+                                        		timeout(time: 20, unit: 'SECONDS') {
+                                                		sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
+                                        		}
+                                		}
+                                		retry(3){
+                                        		timeout(time: 20, unit: 'SECONDS') {
+                                                		sh "docker push ${APPLI}:${params.VERSION}"
+                                        		}
+                                		}
+					
                         	}
 			}
 		}
@@ -76,10 +77,13 @@ pipeline {
 					usernameVariable: "leuser",
 					keyFileVariable: "SSKey"
 				)])
-					{	retry(3){
-							timeout(time: 30, unit: 'SECONDS'){
-								sh """ssh -i "$SSKey" "$leuser"@192.168.1.11 'cd fe && git pull && VERSION=${params.VERSION} docker compose -p monapp up -d'"""
-							}	
+					{	
+						withEnv(["DEPLOY_VERSION=${params.VERSION}"]) {
+							retry(3){
+								timeout(time: 30, unit: 'SECONDS'){
+									sh '''ssh -i "$SSKey" "$leuser"@192.168.1.11 'cd fe && git pull && VERSION=${DEPLOY_VERSION} docker compose -p monapp up -d''''
+								}	
+							}
 						}
 					}
 						
