@@ -81,7 +81,7 @@ pipeline {
 						withEnv(["DEPLOY_VERSION=${params.VERSION}"]) {
 							retry(3){
 								timeout(time: 30, unit: 'SECONDS'){
-									sh '''ssh -i "$SSKey" "$leuser"@192.168.1.11 'cd fe && git pull && VERSION=${DEPLOY_VERSION} docker compose -p monapp up -d''''
+									sh '''ssh -i "$SSKey" "$leuser"@192.168.1.11 "cd fe && git pull && VERSION=$DEPLOY_VERSION docker compose -p monapp up -d"'''
 								}	
 							}
 						}
