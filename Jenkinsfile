@@ -72,11 +72,11 @@ pipeline {
         }
 
         steps{
-                withCredentials(sshUserPrivateKey([
+                withCredentials([sshUserPrivateKey(
                         credentialsId: 'SSH',
                         userVariable: 'leuser',
                         keyFileVariable: 'SSKey'
-                ]))
+                )])
 
                         {
                                 retry(3){
