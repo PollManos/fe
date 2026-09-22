@@ -67,7 +67,7 @@ pipeline {
 		stage("Deploiement eventuel") {
         when {
                 expression {
-                        params.DEPLOIMENT
+                        params.Deploiement
                 }
         }
 
