@@ -74,7 +74,7 @@ pipeline {
         steps{
                 withCredentials([sshUserPrivateKey(
                         credentialsId: 'SSH',
-                        userVariable: 'leuser',
+                        usernameVariable: 'leuser',
                         keyFileVariable: 'SSKey'
                 )])
 
