@@ -65,29 +65,28 @@ pipeline {
 		}
 			
 		stage("Deploiement eventuel") {
-			when {
-				expression {
-					params.Deploiement
-				}
-			}
-			steps {
+        when {
+                expression {
+                        params.DEPLOIMENT
+                }
+        }
 
-				withCredentials([sshUserPrivateKey(
-					credentialsId: "SSH",
-					usernameVariable: "leuser",
-					keyFileVariable: "SSKey"
-				)])
-					{	
-						withEnv(["DEPLOY_VERSION=${params.VERSION}"]) {
-							retry(3){
-								timeout(time: 30, unit: 'SECONDS'){
-									sh '''ssh -i "$SSKey" "$leuser"@192.168.1.11 "cd fe && git pull && VERSION=$DEPLOY_VERSION docker compose -p monapp up -d"'''
-								}	
-							}
-						}
-					}
-						
-			}
-		}
+        steps{
+                withCredentials(sshPrivateKey([
+                        credentialsId: 'SSH',
+                        userKey: 'SSU',
+                        keywordPrivateKey: 'SSP'
+                ]))
+
+                        {
+                                retry(3){
+                                        timeout(time: 20, unit: 'SECONDS') {
+                                                sh '''ssh -u '$SSU' -p '$SSP' && cd fe && git pull && $VERSION=5 docker compose up monapp>
+                                        }
+                                }
+                        }
+        }
+	}
+
 	}
 }
