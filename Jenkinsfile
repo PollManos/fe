@@ -72,21 +72,21 @@ pipeline {
         }
 
         steps{
-                withCredentials(sshPrivateKey([
+                withCredentials(sshUserPrivateKey([
                         credentialsId: 'SSH',
-                        userKey: 'SSU',
-                        keywordPrivateKey: 'SSP'
+                        userVariable: 'leuser',
+                        keyFileVariable: 'SSKey'
                 ]))
 
                         {
                                 retry(3){
                                         timeout(time: 20, unit: 'SECONDS') {
-                                                sh '''ssh -u '$SSU' -p '$SSP' && cd fe && git pull && VERSION=5 docker compose up monapp>'''
+                                                sh '''ssh -u '$leuser' -p '$SSKey' && cd fe && git pull && VERSION=5 docker compose up monapp>'''
                                         }
                                 }
                         }
         }
 	}
-
 	}
 }
+
